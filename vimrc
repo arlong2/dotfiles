@@ -100,15 +100,18 @@ Plugin 'jiangmiao/auto-pairs'
 " other language plugin I've ever seen)
 Plugin 'fatih/vim-go'
 
+" Python autoformat. I'm bad at pep8.
+Plugin 'tell-k/vim-autopep8'
+
 " Better markdown support
-Bundle 'gabrielelana/vim-markdown'
+Plugin 'gabrielelana/vim-markdown'
 
 " Decent (if not excellent) syntax checker. Requires separate set up of
 " external tools.
-Bundle 'vim-syntastic/syntastic.git'
+Plugin 'vim-syntastic/syntastic.git'
 
 " Emmet: make HTTP not fucking unbearable to write in Vim
-Bundle 'mattn/emmet-vim'
+Plugin 'mattn/emmet-vim'
 
 " }}}
 
@@ -262,5 +265,26 @@ nmap <leader>bp :bp<CR>
 " Remapping ctrlp to spc-f-f since ctrl-p has other meanings I like better
 let g:ctrlp_map = '<leader>ff'
 " }}}
+" }}}
+
+" PLUGIN CUSTOMIZATION {{{
+" Sometimes plugins don't work correctly. These are per-plugin customizations
+" that (disclaimer) work on MY MACHINE AND MY MACHINE ONLY.
+"
+" Basically, here be dragons.
+
+" YouCompleteMe {{{
+" Mac OS X ships with a hilariously out of date python. Let's override it with
+" the current one being used (i.e. python 3 or whatever is installed in your
+" venv)
+let g:ycm_python_binary_path='python'
+" }}}
+
+" Syntastic {{{
+" Fix the behavior of warning me about every single fucking issue, and save
+" error messages for only actual errors.
+let g:syntastic_quiet_messages = { "level" : "warnings" }
+" }}}
+
 " }}}
 
