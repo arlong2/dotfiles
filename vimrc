@@ -45,9 +45,10 @@ call vundle#begin()
 " plugins and manipulation of Vim's runtime path.
 Plugin 'VundleVim/Vundle.vim'
 
-" Provides a neat project drawer, accessible through :NERDTreeToggle
-" TODO(gabe): keymaps
+" Provides a neat project drawer, accessible through :NERDTreeToggle or <spc>ft
 Plugin 'scrooloose/nerdtree'
+" Makes NERDTree a little easier to use
+Plugin 'jistr/vim-nerdtree-tabs'
 
 " Provides that super-neat modeline at the bottom and top o the screen
 Plugin 'vim-airline/vim-airline'
@@ -199,27 +200,11 @@ set nu
 set hlsearch
 set incsearch
 set smartcase
-" }}}
 
-" Plugin-specific options {{{
-" Syntastic {{{
-" These are the recommended settings in Syntastic. I might update them with
-" more stuff later.
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-" Checker definitions: need to define which checkers we want to use for each
-" language.
-let g:syntastic_go_checkers = ['go']
-let g:syntastic_python_checkers = ['python', 'pylint']
-
-" }}}
+" Scrolloff: prevent the cursor from moving more than 5 lines close to the
+" screen boundaries
+" Play around with it on a long file and you'll see what I mean
+set scrolloff=5
 " }}}
 " }}}
 
@@ -260,10 +245,19 @@ nmap <leader>w <C-w>
 " to change them now
 nmap <leader>bn :bn<CR>
 nmap <leader>bp :bp<CR>
+" Similar bindings to above for tabs
+nmap <leader>tp :tabp<CR>
+nmap <leader>tn :tabn<CR>
 
 
 " Remapping ctrlp to spc-f-f since ctrl-p has other meanings I like better
 let g:ctrlp_map = '<leader>ff'
+" }}}
+
+" Custom functions {{{
+" Some stuff I've whipped up or stolen from around teh internetz to make my
+" life a little easier
+command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool
 " }}}
 " }}}
 
@@ -284,6 +278,23 @@ let g:ycm_python_binary_path='python'
 " Fix the behavior of warning me about every single fucking issue, and save
 " error messages for only actual errors.
 let g:syntastic_quiet_messages = { "level" : "warnings" }
+
+" These are the recommended settings in Syntastic. I might update them with
+" more stuff later.
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Checker definitions: need to define which checkers we want to use for each
+" language. YOU HAVE TO INSTALL THESE, THAT'S NOT MY PROBLEM.
+let g:syntastic_go_checkers = ['go']
+let g:syntastic_python_checkers = ['python', 'pylint']
+let g:syntastic_ruby_checkers = ['rubocop']
 " }}}
 
 " }}}
