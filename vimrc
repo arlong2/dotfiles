@@ -19,6 +19,7 @@
 "	install go in some way
 "	set up a $GOPATH environment variable
 "	inside Vim, run :GoInstallBinaries
+" 5) Install ag. Install ctags. Both are insanely useful, you won't regret it.
 "
 " Read through the entire file before proceeding, it's important to know what
 " everything does, at least in general.
@@ -113,6 +114,17 @@ Plugin 'vim-syntastic/syntastic.git'
 
 " Emmet: make HTTP not fucking unbearable to write in Vim
 Plugin 'mattn/emmet-vim'
+
+" Search plugin. Use with ack or ag to supercharge code search. (Note:
+" requires ack or ag)
+Plugin 'mileszs/ack.vim'
+
+" easytags-always updates your ctags in the background.
+Plugin 'xolox/vim-easytags'
+" Dependency for easytags
+Plugin 'xolox/vim-misc'
+" Tagbar, a really nice way to view ctags. Toggle with <spc>tt
+Plugin 'majutsushi/tagbar'
 
 " }}}
 
@@ -226,8 +238,12 @@ set modelines=5
 
 " Python augroups to force basic pep8 formatting (more or less :-P)
 au BufNewFile,BufRead *.py
-			\ set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79
+			\ set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80
 			\ expandtab autoindent fileformat=unix
+
+" Fix the horrible markdown defaults
+au BufNewFile,BufRead *.md
+			\ set textwidth=80 nospell
 " }}}
 
 " Leader bindings {{{
@@ -239,6 +255,7 @@ let mapleader=" "
 " example: ft for file tree, ut for undotree, etc.
 nmap <leader>ft :NERDTreeToggle<CR>
 nmap <leader>ut :UndotreeToggle<CR>
+nmap <leader>tt :TagbarToggle<CR>
 " Ctrl-w is an awkward keybinding in my humble opinion. Replace it with ldr-w
 nmap <leader>w <C-w>
 " Buffer nav-I learned these keybindings in my spacemacs days and I'm too lazy
@@ -249,6 +266,13 @@ nmap <leader>bp :bp<CR>
 nmap <leader>tp :tabp<CR>
 nmap <leader>tn :tabn<CR>
 
+" Search binding: <spc>ag (isn't that cute)
+nmap <leader>ag :Ack 
+
+" Disabling syntastic with <spc>ss in situations where it's unacceptably slow
+" or useless
+nmap <leader>ss :SyntasticToggleMode<cr>
+
 
 " Remapping ctrlp to spc-f-f since ctrl-p has other meanings I like better
 let g:ctrlp_map = '<leader>ff'
@@ -258,6 +282,10 @@ let g:ctrlp_map = '<leader>ff'
 " Some stuff I've whipped up or stolen from around teh internetz to make my
 " life a little easier
 command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool
+" Fixing yo typos
+command! Q :q
+command! Wq :wq
+command! WQ :wq
 " }}}
 " }}}
 
@@ -297,5 +325,17 @@ let g:syntastic_python_checkers = ['python', 'pylint']
 let g:syntastic_ruby_checkers = ['rubocop']
 " }}}
 
+" ack.vim {{{
+" Use ag if you have it. It's way faster than ack, you should get it.
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep'
+endif
+" }}}
+
+" vim-easytags {{{
+" Attempts to improve performance
+let g:easytags_syntax_keyword = 'always'
+let g:easytags_async = 1
+" }}}
 " }}}
 
