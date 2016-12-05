@@ -117,9 +117,9 @@ function pnotes() {
 	else
 		vim .
 	fi
-	git add $NOTE_NAME.md > /dev/null 2 >&1
-	git commit -am "updating notes" > /dev/null 2 >&1
-	git push > /dev/null 2>&1 & disown
+	git add $NOTEFILE > /dev/null 2>&1
+	git commit -am "updating notes" > /dev/null 2>&1
+	(git push & disown) > /dev/null 2>&1
 	popd > /dev/null
 }
 # }}}
