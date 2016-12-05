@@ -84,7 +84,9 @@ function notes() {
 	fi
 	popd > /dev/null
 }
+# }}}
 
+# Private note taking {{{
 # Same thing but for my private notes repo; automatically synced with git
 function pnote() {
 	NOTE_DIR=~/privatenotes
@@ -97,9 +99,10 @@ function pnote() {
 	fi
 	vim $NOTE_DIR/$NOTE_NAME.md
 	pushd $NOTE_DIR > /dev/null
-	git add $NOTE_NAME.md > /dev/null 2>&1
-	git commit -am "updating notes" > /dev/null 2>&1
-	(git push & disown) > /dev/null 2>&1
+	git pull
+	git add $NOTE_NAME.md
+	git commit -am "updating notes"
+	git push
 	popd > /dev/null
 }
 
@@ -117,9 +120,10 @@ function pnotes() {
 	else
 		vim .
 	fi
-	git add $NOTEFILE > /dev/null 2>&1
-	git commit -am "updating notes" > /dev/null 2>&1
-	(git push & disown) > /dev/null 2>&1
+	git pull
+	git add $NOTE_NAME.md
+	git commit -am "updating notes"
+	git push
 	popd > /dev/null
 }
 # }}}
