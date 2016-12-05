@@ -20,6 +20,8 @@
 "	set up a $GOPATH environment variable
 "	inside Vim, run :GoInstallBinaries
 " 5) Install ag. Install ctags. Both are insanely useful, you won't regret it.
+" 6) (If you want python syntax checks) install pylint and pylint-django
+" 7) (If you want Ruby syntax checks) install rubocop
 "
 " Read through the entire file before proceeding, it's important to know what
 " everything does, at least in general.
@@ -94,6 +96,8 @@ Plugin 'kien/ctrlp.vim'
 " basically, cd into ~/.vim/bundle/YouCompleteMe and then run `install.py
 " --clang-completer` (omit the last arg if you don't need c-family completion)
 Plugin 'Valloric/YouCompleteMe'
+" Provides automagical completion for C languages (that use Makefiles)
+Plugin 'rdnetto/YCM-Generator'
 
 " Autocomplete parentheses and whatnot
 Plugin 'jiangmiao/auto-pairs'
@@ -273,6 +277,9 @@ nmap <leader>ag :Ack
 " or useless
 nmap <leader>ss :SyntasticToggleMode<cr>
 
+" Map <spc>e to the emmet functionality
+nmap <leader>e <C-y>
+
 
 " Remapping ctrlp to spc-f-f since ctrl-p has other meanings I like better
 let g:ctrlp_map = '<leader>ff'
@@ -300,6 +307,11 @@ command! WQ :wq
 " the current one being used (i.e. python 3 or whatever is installed in your
 " venv)
 let g:ycm_python_binary_path='python'
+" Fix for constantly being asked about using C completion. UNSAFE AND
+" INSECURE. YOU SHOULDN'T DO THIS UNLESS YOU DON'T CARE ABOUT SECURITY.
+" Related: run :YcmGenerateConfig in a C project to auto-generate C completion
+" tool for YouCompleteMe
+let g:ycm_confirm_extra_conf=0
 " }}}
 
 " Syntastic {{{
@@ -323,6 +335,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_go_checkers = ['go']
 let g:syntastic_python_checkers = ['python', 'pylint']
 let g:syntastic_ruby_checkers = ['rubocop']
+
+" Fix Django bullshit with Syntastic
+let g:syntastic_python_pylint_args = "--load-plugins pylint_django"
 " }}}
 
 " ack.vim {{{

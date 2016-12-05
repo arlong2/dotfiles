@@ -84,6 +84,44 @@ function notes() {
 	fi
 	popd > /dev/null
 }
+
+# Same thing but for my private notes repo; automatically synced with git
+function pnote() {
+	NOTE_DIR=~/privatenotes
+	test -d $NOTE_DIR || git clone $PRIVATE_NOTES_REPO $NOTE_DIR || true > /dev/null 2 >&1
+	NOTE_NAME="$1"
+	if [[ -z $NOTE_NAME ]]; then
+		NOTE_NAME="$(date +%Y-%m-%d)"
+	else
+		NOTE_NAME="$(date +%Y-%m-%d)-$NOTE_NAME"
+	fi
+	vim $NOTE_DIR/$NOTE_NAME.md
+	pushd $NOTE_DIR > /dev/null
+	git add $NOTE_NAME.md > /dev/null 2>&1
+	git commit -am "updating notes" > /dev/null 2>&1
+	(git push & disown) > /dev/null 2>&1
+	popd > /dev/null
+}
+
+function pnotes() {
+	NOTE_DIR=~/privatenotes
+	test -d $NOTE_DIR || git clone $PRIVATE_NOTES_REPO $NOTE_DIR || true > /dev/null 2 >&1
+	pushd $NOTE_DIR > /dev/null
+	# Use the fuzzy finder if available
+	if command_exists fzf; then
+		# Only open the selection if one was actually chosen
+		NOTEFILE=$(find * -type f -maxdepth 0 | fzf)
+		if [[ -n $NOTEFILE ]]; then
+			vim $NOTEFILE
+		fi
+	else
+		vim .
+	fi
+	git add $NOTE_NAME.md > /dev/null 2 >&1
+	git commit -am "updating notes" > /dev/null 2 >&1
+	git push > /dev/null 2>&1 & disown
+	popd > /dev/null
+}
 # }}}
 # }}}
 
