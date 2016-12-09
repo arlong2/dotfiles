@@ -248,6 +248,9 @@ au BufNewFile,BufRead *.py
 " Fix the horrible markdown defaults
 au BufNewFile,BufRead *.md
 			\ set textwidth=80 nospell
+
+" Add auto save/reload pos in case your Vim doesn't already have support enabled
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 " }}}
 
 " Leader bindings {{{
@@ -282,7 +285,12 @@ nmap <leader>e <C-y>
 
 
 " Remapping ctrlp to spc-f-f since ctrl-p has other meanings I like better
-let g:ctrlp_map = '<leader>ff'
+" First completely unmap regular old ctrlp
+let g:ctrlp_map = ''
+" always ensures you're finding files from your current working directory
+nmap <leader>ff :CtrlPCurWD<CR>
+" But since the localdir version is sometimes useful...
+nmap <leader>fF :CtrlP<CR>
 " }}}
 
 " Custom functions {{{
