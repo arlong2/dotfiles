@@ -8,20 +8,21 @@
 " 1) Install Vundle. This is simple: just run:
 "	mkdir -p ~/.vim/bundle
 "	git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle
-" 2) Set up YouCompleteMe. This requires doing the following:
+" 2) Open Vim and run :PluginInstall to install all the plugins needed.
+" 3) Set up YouCompleteMe. This requires doing the following:
 "	cd ~/.vim/bundle/YouCompleteMe
 "	python install.py --clang-completer
 "	** You may omit the last argument if you don't want to have C-family
 "	completion
-" 3) (optional but highly recommended) Install ZShell.
+" 4) (optional but highly recommended) Install ZShell.
 "	brew install zsh
-" 4) (If you want the golang tools) Set up Go tools
+" 5) (If you want the golang tools) Set up Go tools
 "	install go in some way
 "	set up a $GOPATH environment variable
 "	inside Vim, run :GoInstallBinaries
-" 5) Install ag. Install ctags. Both are insanely useful, you won't regret it.
-" 6) (If you want python syntax checks) install pylint and pylint-django
-" 7) (If you want Ruby syntax checks) install rubocop
+" 6) Install ag. Install ctags. Both are insanely useful, you won't regret it.
+" 7) (If you want python syntax checks) install pylint and pylint-django
+" 8) (If you want Ruby syntax checks) install rubocop
 "
 " Read through the entire file before proceeding, it's important to know what
 " everything does, at least in general.
@@ -106,11 +107,14 @@ Plugin 'jiangmiao/auto-pairs'
 " other language plugin I've ever seen)
 Plugin 'fatih/vim-go'
 
+" Rust plugin. I can't live without autoformat and colors...
+Plugin 'rust-lang/rust.vim'
+
 " Python autoformat. I'm bad at pep8.
 Plugin 'tell-k/vim-autopep8'
 
 " Better markdown support
-Plugin 'gabrielelana/vim-markdown'
+"Plugin 'gabrielelana/vim-markdown'
 
 " Decent (if not excellent) syntax checker. Requires separate set up of
 " external tools.
@@ -320,6 +324,9 @@ let g:ycm_python_binary_path='python'
 " Related: run :YcmGenerateConfig in a C project to auto-generate C completion
 " tool for YouCompleteMe
 let g:ycm_confirm_extra_conf=0
+" Rust settings. VERY machine specific, THIS WILL BREAK YOUR VIM IF YOU DON'T
+" CHANGE IT.
+let g:ycm_rust_src_path='~/.cargo/sources/rust-1.13.0/src'
 " }}}
 
 " Syntastic {{{
