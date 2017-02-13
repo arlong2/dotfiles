@@ -13,7 +13,7 @@
 "	cd ~/.vim/bundle/YouCompleteMe
 "	python install.py --clang-completer
 "	** You may omit the last argument if you don't want to have C-family
-"	completion
+"	completion and/or you hate puppies
 " 4) (optional but highly recommended) Install ZShell.
 "	brew install zsh
 " 5) (If you want the golang tools) Set up Go tools
@@ -114,7 +114,7 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'tell-k/vim-autopep8'
 
 " Better markdown support
-"Plugin 'gabrielelana/vim-markdown'
+Plugin 'gabrielelana/vim-markdown'
 
 " Decent (if not excellent) syntax checker. Requires separate set up of
 " external tools.
@@ -133,6 +133,11 @@ Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 " Tagbar, a really nice way to view ctags. Toggle with <spc>tt
 Plugin 'majutsushi/tagbar'
+" A plugin for Godot engine's syntax. It ain't fancy but it's good enough.
+Plugin 'a-watson/vim-gdscript'
+
+" A plugin for distraction-free writing.
+Plugin 'junegunn/goyo.vim'
 
 " }}}
 
@@ -152,6 +157,7 @@ set t_Co=256 " because what the fuck terminal doesn't have 256 colors these
 " opaque color scheme that looks really nice imho. But substitute your own as
 " you want.
 colorscheme jay
+set background=dark
 " }}}
 
 " EDITOR OPTIONS {{{
@@ -295,6 +301,9 @@ let g:ctrlp_map = ''
 nmap <leader>ff :CtrlPCurWD<CR>
 " But since the localdir version is sometimes useful...
 nmap <leader>fF :CtrlP<CR>
+
+" Adding a mapping for my custom :Insertdate function
+nmap <leader>id :Insertdate<CR>I<BS> <ESC>$
 " }}}
 
 " Custom functions {{{
@@ -305,6 +314,8 @@ command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool
 command! Q :q
 command! Wq :wq
 command! WQ :wq
+
+command! Insertdate :r !date
 " }}}
 " }}}
 
