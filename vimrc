@@ -110,6 +110,9 @@ Plugin 'fatih/vim-go'
 " Rust plugin. I can't live without autoformat and colors...
 Plugin 'rust-lang/rust.vim'
 
+" Haskell support plugins
+Plugin 'bitc/vim-hdevtools'
+
 " Python autoformat. I'm bad at pep8.
 Plugin 'tell-k/vim-autopep8'
 
@@ -261,6 +264,12 @@ au BufNewFile,BufRead *.md
 
 " Add auto save/reload pos in case your Vim doesn't already have support enabled
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" This is similar to the Python formatting, but I tend to like Groovy code
+" with 2 space tabs for some reason.
+au BufNewFile,BufRead *.groovy
+			\ set tabstop=2 softtabstop=2 shiftwidth=2
+			\ expandtab autoindent fileformat=unix
 " }}}
 
 " Leader bindings {{{
@@ -338,6 +347,8 @@ let g:ycm_confirm_extra_conf=0
 " Rust settings. VERY machine specific, THIS WILL BREAK YOUR VIM IF YOU DON'T
 " CHANGE IT.
 let g:ycm_rust_src_path='~/.cargo/sources/rust-1.13.0/src'
+" Fix Ruby completion
+let g:ycm_seed_identifiers_with_syntax=1
 " }}}
 
 " Syntastic {{{
