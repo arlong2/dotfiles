@@ -8,7 +8,9 @@
 " 1) Install Vundle. This is simple: just run:
 "	mkdir -p ~/.vim/bundle
 "	git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle
+"	Note: This might work automagically now. NO GUARANTEES THOUGH.
 " 2) Open Vim and run :PluginInstall to install all the plugins needed.
+"	Note: This might work automagically now. NO GUARANTEES THOUGH.
 " 3) Set up YouCompleteMe. This requires doing the following:
 "	cd ~/.vim/bundle/YouCompleteMe
 "	python install.py --clang-completer
@@ -34,14 +36,35 @@
 " Thanks, and have fun!
 " }}}
 
+" AUTO-SETUP MAGICS {{{
+" We'll detect which vim derivative we're using (vim vs. nvim)
+if has('nvim')
+	" and set the path to the config root
+	let s:editor_root=expand("~/.config/nvim")
+else
+	let s:editor_root=expand("~/.vim")
+endif
+
+" Then we can set up Vundle
+let s:vundle_installed=1
+let s:vundle_readme=s:editor_root . '/bundle/Vundle.vim/README.md'
+if !filereadable(s:vundle_readme)
+	echo "Installing Vundle, please wait!"
+	echo ""
+	silent call mkdir(s:editor_root . '/bundle', "p")
+	silent execute "!git clone https://github.com/VundleVim/Vundle.vim " . s:editor_root . "/bundle/Vundle.vim"
+	let s:vundle_installed=0
+endif
+let s:vundle_path=s:editor_root . '/bundle/Vundle.vim'
+let &rtp = &rtp . ',' . s:editor_root . '/bundle/Vundle.vim'
+call vundle#rc(s:editor_root . '/bundle')
+" }}}
+
 " PREAMBLE {{{
 set nocompatible              " be iMproved, required by Vundle
 filetype off                  " required by Vundle
 set shell=/bin/zsh            " Replace with your favorite BASH-COMPATIBLE sh
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set t_ut=                     " Fix background color issues in Tmux
 " }}}
 
 " PLUGINZ {{{
@@ -75,7 +98,7 @@ Plugin 'tpope/vim-sensible'
 " Short version: gcc comments/uncomments lines. gc takes a motion/count.
 Plugin 'tpope/vim-commentary'
 
-" GitGutter gives you indicators on the left fringe ("gutter") of your 
+" GitGutter gives you indicators on the left fringe ("gutter") of your
 " window telling you which lines have been changed.
 Plugin 'airblade/vim-gitgutter'
 
@@ -97,6 +120,7 @@ Plugin 'kien/ctrlp.vim'
 " basically, cd into ~/.vim/bundle/YouCompleteMe and then run `install.py
 " --clang-completer` (omit the last arg if you don't need c-family completion)
 Plugin 'Valloric/YouCompleteMe'
+
 " Provides automagical completion for C languages (that use Makefiles)
 Plugin 'rdnetto/YCM-Generator'
 
@@ -113,8 +137,8 @@ Plugin 'rust-lang/rust.vim'
 " Haskell support plugins
 Plugin 'bitc/vim-hdevtools'
 
-" Python autoformat. I'm bad at pep8.
-Plugin 'tell-k/vim-autopep8'
+" Python-mode, decent python language support.
+Plugin 'python-mode/python-mode'
 
 " Better markdown support
 Plugin 'gabrielelana/vim-markdown'
@@ -142,10 +166,23 @@ Plugin 'a-watson/vim-gdscript'
 " A plugin for distraction-free writing.
 Plugin 'junegunn/goyo.vim'
 
+" A minimap sublime-style. It's kinda silly, but I like it.
+Plugin 'severin-lemaignan/vim-minimap'
+
+" easymotion. type spc-spc-w and see what happens.
+Plugin 'easymotion/vim-easymotion'
+
 " }}}
 
 " MORE PREAMBLE {{{
 call vundle#end()            " required
+
+if !s:vundle_installed
+	echo "Installing plugins..."
+	echo ""
+	execute "PluginInstall"
+endif
+
 filetype plugin indent on    " required
 " }}}
 
@@ -288,6 +325,10 @@ nmap <leader>w <C-w>
 " to change them now
 nmap <leader>bn :bn<CR>
 nmap <leader>bp :bp<CR>
+" Also add leader-based bindings for fuzzy buffer finding. (also a spacemacs
+" holdover)
+nmap <leader>bb :CtrlPBuffer<CR>
+
 " Similar bindings to above for tabs
 nmap <leader>tp :tabp<CR>
 nmap <leader>tn :tabn<CR>
@@ -300,8 +341,7 @@ nmap <leader>ag :Ack
 nmap <leader>ss :SyntasticToggleMode<cr>
 
 " Map <spc>e to the emmet functionality
-nmap <leader>e <C-y>
-
+nmap <leader>e <C-y>,
 
 " Remapping ctrlp to spc-f-f since ctrl-p has other meanings I like better
 " First completely unmap regular old ctrlp
@@ -313,6 +353,9 @@ nmap <leader>fF :CtrlP<CR>
 
 " Adding a mapping for my custom :Insertdate function
 nmap <leader>id :Insertdate<CR>I<BS> <ESC>$
+
+" minimap shortcut
+nmap <leader>mm :MinimapToggle<CR>
 " }}}
 
 " Custom functions {{{
@@ -339,6 +382,7 @@ command! Insertdate :r !date
 " the current one being used (i.e. python 3 or whatever is installed in your
 " venv)
 let g:ycm_python_binary_path='python'
+let g:ycm_server_python_interpreter='python3'
 " Fix for constantly being asked about using C completion. UNSAFE AND
 " INSECURE. YOU SHOULDN'T DO THIS UNLESS YOU DON'T CARE ABOUT SECURITY.
 " Related: run :YcmGenerateConfig in a C project to auto-generate C completion
@@ -389,5 +433,21 @@ endif
 let g:easytags_syntax_keyword = 'always'
 let g:easytags_async = 1
 " }}}
+
+" python-mode {{{
+" Fix to use Python 3 by default. Usually a good thing to do.
+let g:pymode_python='python3'
+" Disable autocompletion; ycm does it better.
+let g:pymode_rope_completion = 0
+" }}}
 " }}}
 
+" ESOTERIC NONSENSE {{{
+" Most of the stuff below is stuff I got from random places on the internet. It
+" will likely change very frequently since it's mostly just silliness.
+
+" Make the scroll wheel undo/redo changes
+set mouse=a
+map <ScrollWheelUp> <C-r>
+map <ScrollWheelDown> u
+" }}}

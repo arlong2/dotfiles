@@ -129,7 +129,7 @@ function pnotes() {
 # }}}
 # }}}
 
-# Extra path manipulation {{{1
+# Extra path manipulation {{{
 # Add /usr/local/bin to the path
 export PATH=/usr/local/bin:$PATH
 # Add $HOME/bin to the path
