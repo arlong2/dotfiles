@@ -162,9 +162,11 @@ Plugin 'xolox/vim-misc'
 Plugin 'majutsushi/tagbar'
 " A plugin for Godot engine's syntax. It ain't fancy but it's good enough.
 Plugin 'a-watson/vim-gdscript'
-
+"" Writing plugins
 " A plugin for distraction-free writing.
 Plugin 'junegunn/goyo.vim'
+" A wiki-ing plugin to make note taking easier
+Plugin 'vimwiki/vimwiki'
 
 " A minimap sublime-style. It's kinda silly, but I like it.
 Plugin 'severin-lemaignan/vim-minimap'
@@ -307,6 +309,10 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 au BufNewFile,BufRead *.groovy
 			\ set tabstop=2 softtabstop=2 shiftwidth=2
 			\ expandtab autoindent fileformat=unix
+
+" Fix word wrap in vimwiki
+au BufNewFile,BufRead *.wiki
+			\ set tw=9999999 wrap linebreak nolist
 " }}}
 
 " Leader bindings {{{
@@ -367,7 +373,9 @@ command! Q :q
 command! Wq :wq
 command! WQ :wq
 
+" For inserting dates into files. useful for notes esp.
 command! Insertdate :r !date
+
 " }}}
 " }}}
 
@@ -440,6 +448,9 @@ let g:pymode_python='python3'
 " Disable autocompletion; ycm does it better.
 let g:pymode_rope_completion = 0
 " }}}
+
+" vimwiki {{{
+let g:vimwiki_list = [{'path': '~/wiki'}, {'path': './wiki'}]
 " }}}
 
 " ESOTERIC NONSENSE {{{
