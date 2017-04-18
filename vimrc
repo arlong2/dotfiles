@@ -294,12 +294,12 @@ set modelines=5
 
 " Python augroups to force basic pep8 formatting (more or less :-P)
 au BufNewFile,BufRead *.py
-			\ set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80
+			\ setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80
 			\ expandtab autoindent fileformat=unix
 
 " Fix the horrible markdown defaults
 au BufNewFile,BufRead *.md
-			\ set textwidth=80 nospell
+			\ setlocal textwidth=80 nospell
 
 " Add auto save/reload pos in case your Vim doesn't already have support enabled
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -307,12 +307,19 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " This is similar to the Python formatting, but I tend to like Groovy code
 " with 2 space tabs for some reason.
 au BufNewFile,BufRead *.groovy
-			\ set tabstop=2 softtabstop=2 shiftwidth=2
+			\ setlocal tabstop=2 softtabstop=2 shiftwidth=2
 			\ expandtab autoindent fileformat=unix
 
 " Fix word wrap in vimwiki
 au BufNewFile,BufRead *.wiki
 			\ set tw=9999999 wrap linebreak nolist
+
+" Fix Vim's AWFUL syntax highlighting performance for ruby files
+au BufNewFile,BufRead FileType ruby
+			\ setlocal re=1
+
+au BufNewFile,BufRead Vagrantfile
+			\ setlocal re=1
 " }}}
 
 " Leader bindings {{{
@@ -331,9 +338,17 @@ nmap <leader>w <C-w>
 " to change them now
 nmap <leader>bn :bn<CR>
 nmap <leader>bp :bp<CR>
+nmap <leader>bd :bd<CR>
 " Also add leader-based bindings for fuzzy buffer finding. (also a spacemacs
 " holdover)
 nmap <leader>bb :CtrlPBuffer<CR>
+
+" Paste mode (toggle with spc-p-m)
+nmap <leader>pm :set paste!<CR>
+
+" foldlevel manipulation
+nmap <leader>zz :set foldlevel=0<CR>
+nmap <leader>za :set foldlevel=9999<CR>
 
 " Similar bindings to above for tabs
 nmap <leader>tp :tabp<CR>
@@ -362,6 +377,13 @@ nmap <leader>id :Insertdate<CR>I<BS> <ESC>$
 
 " minimap shortcut
 nmap <leader>mm :MinimapToggle<CR>
+
+" Distraction free writing.
+nmap <leader>df :Goyo<CR>
+" and to close it
+" Note the colorscheme hack. It fixes the coloring issues, but not elegantly.
+" May try to make that better later
+nmap <leader>dc :Goyo!<CR>:colorscheme jay<CR>
 " }}}
 
 " Custom functions {{{
@@ -461,4 +483,5 @@ let g:vimwiki_list = [{'path': '~/wiki'}, {'path': './wiki'}]
 set mouse=a
 map <ScrollWheelUp> <C-r>
 map <ScrollWheelDown> u
+
 " }}}

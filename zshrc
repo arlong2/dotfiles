@@ -1,7 +1,7 @@
 # vim: fdm=marker
 
 # README FIRST {{{
-# This vimrc depends on oh-my-zsh being installed and configured. Google it.
+# This zshrc depends on oh-my-zsh being installed and configured. Google it.
 #
 # Also, you should have fzf installed for fuzzy-finding goodness.
 #
@@ -13,10 +13,10 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 # omzsh theme
-ZSH_THEME="robbyrussell"
+ZSH_THEME="af-magic"
 
 # The most basic set of plugins possible. I don't need a lot :)
-plugins=(git docker virtualenv virtualenvwrapper)
+plugins=(git docker virtualenv)
 
 # The bizness end of omzsh
 source $ZSH/oh-my-zsh.sh
